@@ -33,6 +33,20 @@ app.get("/software_project/questions",async(req,res)=>{
     }  
 })
 
+app.post("/software_project/addQuestions",async(req,res)=>{
+  try{
+      const  {question,options,correct} = req.body
+      console.log(req.body)
+      const question_object = new Question({question:question,options:options,correct:correct})
+      await question_object.save()
+      console.log(question_object)
+      res.json(question_object)
+  }catch(error){
+      console.error(error.message);
+      res.status(500).send("Internal Server Error");
+  }
+})
+
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })

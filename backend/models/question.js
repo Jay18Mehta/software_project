@@ -11,7 +11,11 @@ const questionSchema  = new mongoose.Schema({
         required :true,
         minItems: 2,
         maxItems: 4,
-    }]
+    }],
+    correct:{
+        type : String,
+        required : true
+    }
 })
 
 const Question = mongoose.model("Question",questionSchema)
