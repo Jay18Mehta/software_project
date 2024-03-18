@@ -1,8 +1,10 @@
-import { View,Text, Pressable } from "react-native"
+import { View,Text, Pressable,StyleSheet} from "react-native"
 import { useState,useEffect } from "react";
 import Question from "./question";
+import { useIsFocused } from "@react-navigation/native";
 
-export default function Home(){
+export default function Home({navigation}){
+    const isFocused = useIsFocused();
     const [questions,setQuestions] = useState([])
 
     const fetchQuestions=async()=>{
@@ -19,19 +21,38 @@ export default function Home(){
     }
 
     const addQuestion = async()=>{
-        
+        navigation.navigate('AddQuestion')
     }
 
     useEffect(()=>{
-        fetchQuestions()
-    },[])
+        if(isFocused){
+            fetchQuestions()
+        }
+    },[isFocused])
 
     return (
-        <View>
+        <View style = {styles.home}>
             {questions.map((question)=>{
                 return <Question question={question}/>
             })}
-            <Pressable onPress={addQuestion}><Text>+</Text></Pressable>
+            <Pressable style={styles.addButton} onPress={addQuestion}><Text>+</Text></Pressable>
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    home :{
+        flex:1
+    },
+    addButton : {
+        position: 'absolute',
+        bottom:50,
+        right:50,
+        backgroundColor:"#fca103",
+        width: 44,
+        height: 44,
+        borderRadius: 44/2,
+        alignItems:"center",
+        justifyContent:"center"
+    }
+})
