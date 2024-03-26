@@ -18,13 +18,21 @@
       "supportsTablet": true
     },
     "android": {
+      "googleServicesFile":"./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.jay18mehta.software_project"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "24542f87-86bc-44d6-bb8c-292d5f6152ba"
+      }
+    },
+    "plugins": ["@react-native-google-signin/google-signin"]
   }
 }
