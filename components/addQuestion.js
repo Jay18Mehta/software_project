@@ -13,7 +13,7 @@ export default function AddQuestion({navigation}){
         // console.log(question)
         e.preventDefault()
         // Api Call
-        const response=await fetch(`http://172.31.33.189/software_project/addQuestions`,{
+        const response=await fetch(`http://172.31.33.189/software_project/addQuestions`,{   //Ansh =>172.31.52.60, Jay => 172.31.33.189
             method:"post",
             headers:{
                 "Content-Type":'application/json'
