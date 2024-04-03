@@ -15,6 +15,7 @@
     "@react-navigation/native": "^6.1.16",
     "@react-navigation/native-stack": "^6.9.25",
     "@react-navigation/stack": "^6.3.28",
+    "eas-cli": "^7.6.1",
     "expo": "~50.0.8",
     "expo-dev-client": "~3.3.11",
     "expo-status-bar": "~1.11.1",

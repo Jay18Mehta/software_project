@@ -9,14 +9,14 @@ export default function Home({navigation}){
 
     const fetchQuestions=async()=>{
         //Api call
-        const response=await fetch(`http://172.31.33.189/software_project/questions`,{
+        const response=await fetch(`http://172.31.52.60/software_project/questions`,{
             method:"get",
             headers:{
                 "Content-Type":'application/json'
             },
         })
+
         const json = await response.json();
-        console.log(json)
         setQuestions(json)
     }
 
@@ -32,9 +32,11 @@ export default function Home({navigation}){
 
     return (
         <View style = {styles.home}>
-            {questions.map((question)=>{
+            {/* {questions.map((question)=>{
                 return <Question question={question}/>
-            })}
+            })} */}
+            <Question questions={questions} />
+
             <Pressable style={styles.addButton} onPress={addQuestion}><Text>+</Text></Pressable>
         </View>
     )
@@ -46,8 +48,8 @@ const styles = StyleSheet.create({
     },
     addButton : {
         position: 'absolute',
-        bottom:50,
-        right:50,
+        bottom:40,
+        right: 40,
         backgroundColor:"#fca103",
         width: 44,
         height: 44,
