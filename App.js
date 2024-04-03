@@ -1,22 +1,41 @@
 import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet} from 'react-native'
+
 import Home from "./components/home"
 import AddQuestion from './components/addQuestion'
+import Login from './components/login'
+
+import { useEffect ,useState} from 'react'
+
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { NavigationContainer } from '@react-navigation/native'
+import * as SecureStore from 'expo-secure-store';
+
 import "expo-dev-client"
-import Login from './components/login'
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const [isLoggedIn,setIsLoggedIn] = useState(false)
+  useEffect(()=>{
+    async function checkIsLoggedIn(){
+      if(await SecureStore.getItemAsync("email")){
+        setIsLoggedIn(true)
+      }
+      else{
+        setIsLoggedIn(false)
+      }
+    }
+    checkIsLoggedIn()
+  },[])
   return (
     //<Home/>
     <NavigationContainer style={styles.container}>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="AddQuestion" component={AddQuestion} />
-      </Stack.Navigator>
+        <Stack.Navigator initialRouteName={!isLoggedIn ? "Login" : "Home"}>
+          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name = "Login" component={Login}/>
+          <Stack.Screen name="AddQuestion" component={AddQuestion} />
+        </Stack.Navigator>
     </NavigationContainer>
   );
 }

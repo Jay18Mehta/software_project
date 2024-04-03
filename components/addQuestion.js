@@ -1,5 +1,6 @@
 import { View, TextInput, StyleSheet, Pressable, Text } from "react-native"
 import { useState } from "react"
+import * as SecureStore from 'expo-secure-store';
 
 export default function AddQuestion({ navigation }) {
     const [question, setQuestion] = useState("")
@@ -12,13 +13,14 @@ export default function AddQuestion({ navigation }) {
     const addQuestion = async (e) => {
         // console.log(question)
         e.preventDefault()
+        const user_email = await SecureStore.getItemAsync("email")
         // Api Call
-        const response = await fetch(`http://172.31.52.60/software_project/addQuestions`, {   //Ansh =>172.31.52.60, Jay => 172.31.33.189
+        const response = await fetch(`http://172.31.33.189/software_project/addQuestions`, {   //Ansh =>172.31.52.60, Jay => 172.31.33.189
             method: "post",
             headers: {
                 "Content-Type": 'application/json'
             },
-            body: JSON.stringify({ question: question, options: [option1, option2, option3, option4], correct: correctOption })
+            body: JSON.stringify({ question: question, options: [option1, option2, option3, option4], correct: correctOption,email:user_email })
         })
         const json = await response.json()
         navigation.navigate('Home')

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const User = require("./user")
 
 const questionSchema  = new mongoose.Schema({
     question : {
@@ -15,6 +16,10 @@ const questionSchema  = new mongoose.Schema({
     correct:{
         type : String,
         required : true
+    },
+    user:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User"
     }
 })
 

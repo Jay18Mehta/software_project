@@ -4,7 +4,8 @@ const cors = require('cors')
 const mongoose = require("mongoose")
 const port = 80
 
-const Question =  require("./models/question") 
+const Question =  require("./models/question")
+const User = require("./models/user") 
 
 main().catch(err => console.log(err));
 
@@ -35,15 +36,37 @@ app.get("/software_project/questions",async(req,res)=>{
 
 app.post("/software_project/addQuestions",async(req,res)=>{
   try{
-      const  {question,options,correct} = req.body
+      const  {question,options,correct,email} = req.body
       console.log(req.body)
-      const question_object = new Question({question:question,options:options,correct:correct})
+      const user = await User.findOne({email:email})
+      const question_object = new Question({question:question,options:options,correct:correct,user:user})
       await question_object.save()
+      user.questions.push(question_object)
+      await user.save()
       console.log(question_object)
-      res.json(question_object)
+      res.json(req.body)
   }catch(error){
       console.error(error.message);
       res.status(500).send("Internal Server Error");
+  }
+})
+
+app.post("/software_project/login",async(req,res)=>{
+  try{
+    const {username , email} = req.body
+    console.log(req.body)
+    const user = await User.findOne({username:username,email:email})
+    console.log(user)
+    if(!user){
+      const new_user = new User({username:username,email:email})
+      await new_user.save()
+      console.log(new_user)
+      res.json(new_user)
+    }
+    res.json(user)
+  }catch(error){
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
   }
 })
 
