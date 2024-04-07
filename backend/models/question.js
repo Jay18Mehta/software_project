@@ -20,6 +20,14 @@ const questionSchema  = new mongoose.Schema({
     user:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User"
+    },
+    upvotes:{
+        type:Number,
+        default:0
+    },
+    downvotes:{
+        type:Number,
+        default:0
     }
 })
 

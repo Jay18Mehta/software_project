@@ -17,7 +17,25 @@ const userSchema  = new mongoose.Schema({
             type:mongoose.Schema.Types.ObjectId,
             ref:'Question'
         }
-    ]
+    ],
+    bookmarked_questions:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'Question'
+        }
+    ], 
+    upvoteded_questions:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'Question'
+        }
+    ], 
+    downvoted_questions:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'Question'
+        }
+    ], 
 })
 
 const User = mongoose.model("User",userSchema)

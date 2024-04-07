@@ -2,60 +2,43 @@ import { View,Text, Pressable,StyleSheet} from "react-native"
 import { useState,useEffect } from "react";
 import Question from "./question";
 import { useIsFocused } from "@react-navigation/native";
+import Tab_one from "./tab_one";
+import AddQuestion from "./addQuestion";
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { NavigationContainer } from '@react-navigation/native'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import User from "./user";
+
+const Stack = createNativeStackNavigator();
+
+const Tab = createBottomTabNavigator();
+
+const Question_One_Tab = ()=>{
+    return (
+        <NavigationContainer style={styles.container} independent={true}>
+            <Stack.Navigator initialRouteName="Tab_one">
+            <Stack.Screen name="Tab_one" component={Tab_one} options={{ headerShown: false }}/>
+            <Stack.Screen name = "AddQuestion" component={AddQuestion}/>
+            </Stack.Navigator>
+        </NavigationContainer>
+    )
+}
 
 export default function Home({navigation}){
-    const isFocused = useIsFocused();
-    const [questions,setQuestions] = useState([])
+    return(
+        <NavigationContainer independent={true}>
+            <Tab.Navigator>
+                <Tab.Screen name="Question_One_Tab" component={Question_One_Tab} />
+                <Tab.Screen name="User" component={User} />
+            </Tab.Navigator>
+        </NavigationContainer>
+        // <Question_One_Tab/>
 
-    const fetchQuestions= async() => {
-        //Api call
-        const response=await fetch(`http://172.31.52.60/software_project/questions`,{
-            method:"get",
-            headers:{
-                "Content-Type":'application/json'
-            },
-        })
-
-        const json = await response.json();
-        console.log(json)
-        setQuestions(json)
-    }
-
-    const addQuestion = async() => {
-        navigation.navigate('AddQuestion')
-    }
-
-    useEffect(()=>{
-        if(isFocused){
-            fetchQuestions()
-        }
-    },[isFocused])
-
-    return (
-        <View style = {styles.home}>
-            {/* {questions.map((question)=>{
-                return <Question question={question}/>
-            })} */}
-            <Question questions={questions} />
-
-            <Pressable style={styles.addButton} onPress={addQuestion}><Text>+</Text></Pressable>
-        </View>
     )
 }
 
 const styles = StyleSheet.create({
-    home :{
-        flex:1
+    container: {
+      flex: 1
     },
-    addButton : {
-        position: 'absolute',
-        bottom:40,
-        right: 40,
-        backgroundColor:"#fca103",
-        width: 44,
-        height: 44,
-        borderRadius: 44/2,
-        alignItems:"center",
-        justifyContent:"center"
-    }
-})
+  });
