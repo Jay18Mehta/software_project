@@ -7,9 +7,9 @@ export default function Home({navigation}){
     const isFocused = useIsFocused();
     const [questions,setQuestions] = useState([])
 
-    const fetchQuestions=async()=>{
+    const fetchQuestions= async() => {
         //Api call
-        const response=await fetch(`http://172.31.33.189/software_project/questions`,{
+        const response=await fetch(`http://172.31.52.60/software_project/questions`,{
             method:"get",
             headers:{
                 "Content-Type":'application/json'
@@ -21,7 +21,7 @@ export default function Home({navigation}){
         setQuestions(json)
     }
 
-    const addQuestion = async()=>{
+    const addQuestion = async() => {
         navigation.navigate('AddQuestion')
     }
 
