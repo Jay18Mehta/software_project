@@ -2,15 +2,18 @@ import { View,Text, Pressable,StyleSheet} from "react-native"
 import { useState,useEffect } from "react";
 import Question from "./question";
 import { useIsFocused } from "@react-navigation/native";
+import * as SecureStore from 'expo-secure-store';
 
 export default function Tab_one({navigation}){
     const isFocused = useIsFocused();
     const [questions,setQuestions] = useState([])
 
     const fetchQuestions=async()=>{
+        const email = await SecureStore.getItemAsync("email")
         //Api call
         const response=await fetch(`http://172.31.33.189/software_project/questions`,{
-            method:"get",
+            method:"post",
+            body:JSON.stringify({email:email }),
             headers:{
                 "Content-Type":'application/json'
             },
@@ -18,7 +21,7 @@ export default function Tab_one({navigation}){
 
         const json = await response.json();
         console.log(json)
-        setQuestions(json)
+        setQuestions(json.questions)
     }
 
     const addQuestion = async()=>{

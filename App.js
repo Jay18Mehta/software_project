@@ -14,7 +14,7 @@ import "expo-dev-client"
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [isLoggedIn,setIsLoggedIn] = useState(false)
+  const [isLoggedIn,setIsLoggedIn] = useState(true)
   useEffect(()=>{
     async function checkIsLoggedIn(){
       if(await SecureStore.getItemAsync("email")){
