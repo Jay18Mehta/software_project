@@ -26,8 +26,9 @@ app.use(express.urlencoded({ extended: true }));
 app.post("/software_project/questions",async(req,res)=>{
     try{
         const {email} = req.body
-        const user = await User.findOne({email:email})//.populate('bookmarked_questions')
+        const user = await User.findOne({email:email})  //.populate('bookmarked_questions')
         const questions = await Question.find()
+
         // questions = await questions.json()
         // console.log(questions)
         // for(let question in questions){
@@ -46,7 +47,8 @@ app.post("/software_project/questions",async(req,res)=>{
         //   return question
         // })
         // console.log(modified_questions,user.bookmarked_questions)
-        res.json({questions:questions,bookmarked_questions:user.bookmarked_questions,upvoteded_questions:user.upvoteded_questions,downvoted_questions:user.downvoted_questions})
+
+        res.json({questions:questions,bookmarked_questions:user.bookmarked_questions,upvoted_questions:user.upvoted_questions,downvoted_questions:user.downvoted_questions})
     }catch(error){
         console.error(error.message);
         res.status(500).send("Internal Server Error");
@@ -108,13 +110,11 @@ app.post("/software_project/add_bookmark",async(req,res)=>{
 app.post("/software_project/remove_bookmark",async(req,res)=>{
   try{
     const {questionId,email} = req.body
-    const question = await Question.findById(questionId)
     const user = await User.findOne({email:email})
-    if(user.bookmarked_questions.includes(question._id)){
-      user.bookmarked_questions.pop(question)
+    if(user.bookmarked_questions.includes(questionId)){
+      await User.findByIdAndUpdate({_id:user._id},{ $pull: { bookmarked_questions:questionId  } });
     }
-    await user.save()
-    res.json(question)
+    res.json(user)
   }catch(error){
     console.error(error.message);
     res.status(500).send("Internal Server Error");
@@ -126,16 +126,18 @@ app.post("/software_project/upvote",async(req,res)=>{
     const {questionId,email} = req.body
     const question = await Question.findById(questionId)
     const user = await User.findOne({email:email})
-    if(!user.upvoteded_questions.includes(question._id)){
-      user.upvoteded_questions.push(question)
-      question.upvotes +=1
+    if(!user.upvoted_questions.includes(question._id)){
+      user.upvoted_questions.push(question)
+      question.upvotes += 1
       if(user.downvoted_questions.includes(question._id)){
-        user.downvoted_questions.pop(question)
-        question.downvotes -=1
+        // user.downvoted_questions.pop(question)
+        await User.findByIdAndUpdate({_id:user._id},{ $pull: { downvoted_questions:questionId  } });
+        question.downvotes -= 1
       }          
     }
     else{
-      user.upvoteded_questions.pop(question)
+      // user.upvoted_questions.pop(question)
+      await User.findByIdAndUpdate({_id:user._id},{ $pull: { upvoted_questions:questionId  } });
       question.upvotes -=1
     }
     await user.save()
@@ -154,13 +156,15 @@ app.post("/software_project/downvote",async(req,res)=>{
     if(!user.downvoted_questions.includes(question._id)){
       user.downvoted_questions.push(question)
       question.downvotes +=1
-      if(user.upvoteded_questions.includes(question._id)){
-        user.upvoteded_questions.pop(question)
+      if(user.upvoted_questions.includes(question._id)){
+        // user.upvoted_questions.pop(question)
+        await User.findByIdAndUpdate({_id:user._id},{ $pull: { upvoted_questions:questionId  } });
         question.upvotes -=1
       }          
     }
     else{
-      user.downvoted_questions.pop(question)
+      // user.downvoted_questions.pop(question)
+      await User.findByIdAndUpdate({_id:user._id},{ $pull: { downvoted_questions:questionId  } });
       question.downvotes -=1
     }
     await user.save()
