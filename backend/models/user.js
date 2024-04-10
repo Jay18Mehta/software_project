@@ -24,7 +24,7 @@ const userSchema  = new mongoose.Schema({
             ref:'Question'
         }
     ], 
-    upvoteded_questions:[
+    upvoted_questions:[
         {
             type:mongoose.Schema.Types.ObjectId,
             ref:'Question'

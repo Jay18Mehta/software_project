@@ -32,7 +32,6 @@ export default function Home({navigation}){
                 <Tab.Screen name="User" component={User} />
             </Tab.Navigator>
         </NavigationContainer>
-        // <Question_One_Tab/>
 
     )
 }
