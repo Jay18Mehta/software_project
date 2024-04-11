@@ -11,11 +11,10 @@ export default function AddQuestion({ navigation }) {
     const [correctOption, setCorrectOption] = useState("")
 
     const addQuestion = async (e) => {
-        // console.log(question)
         e.preventDefault()
         const user_email = await SecureStore.getItemAsync("email")
         // Api Call
-        const response = await fetch(`http://172.31.52.60/software_project/addQuestions`, {   //Ansh =>172.31.52.60, Jay => 172.31.33.189
+        const response = await fetch(`http://172.31.33.189/software_project/addQuestions`, {   //Ansh =>172.31.52.60, Jay => 172.31.33.189
             method: "post",
             headers: {
                 "Content-Type": 'application/json'
