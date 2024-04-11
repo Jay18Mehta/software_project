@@ -57,10 +57,10 @@ app.post("/software_project/questions",async(req,res)=>{
 
 app.post("/software_project/addQuestions",async(req,res)=>{
   try{
-      const  {question,options,correct,email} = req.body
+      const  {question,options,correct,email,category} = req.body
       console.log(req.body)
       const user = await User.findOne({email:email})
-      const question_object = new Question({question:question,options:options,correct:correct,user:user})
+      const question_object = new Question({question:question,options:options,correct:correct,user:user,category:category})
       await question_object.save()
       user.questions.push(question_object)
       await user.save()

@@ -34,12 +34,10 @@ export default function Tab_one({ navigation }) {
     }
 
     useEffect(() => {
-        if (isFocused) {
-            fetchQuestions()
-        }
-    }, [isFocused])
 
-    console.log(upvoted_questions)
+        fetchQuestions()
+        
+    }, [isFocused,navigation])
 
     return (
         <View style={styles.home}>

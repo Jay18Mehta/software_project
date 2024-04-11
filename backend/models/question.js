@@ -28,6 +28,11 @@ const questionSchema  = new mongoose.Schema({
     downvotes:{
         type:Number,
         default:0
+    },
+    category:{
+        type:String,
+        required:true,
+        enum:["General Knowledge","Entertainment","Science","Politics","Geography","History","Sports","Others"]
     }
 })
 
