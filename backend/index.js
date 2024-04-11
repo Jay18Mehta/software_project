@@ -26,28 +26,8 @@ app.use(express.urlencoded({ extended: true }));
 app.post("/software_project/questions",async(req,res)=>{
     try{
         const {email} = req.body
-        const user = await User.findOne({email:email})  //.populate('bookmarked_questions')
+        const user = await User.findOne({email:email})
         const questions = await Question.find()
-
-        // questions = await questions.json()
-        // console.log(questions)
-        // for(let question in questions){
-        //   console.log(question)
-        // }
-        // let modified_questions = questions.map((question)=>{
-        //   question.is_bookmarked = false
-        //   question.is_upvoted = false
-        //   question.is_downvoted = false
-        //   user.bookmarked_questions.map((bookmarked_question)=>{
-        //     if(bookmarked_question._id.toString() == question._id.toString()){
-        //       console.log("hi")
-        //       question.is_bookmarked = true
-        //     }
-        //   })
-        //   return question
-        // })
-        // console.log(modified_questions,user.bookmarked_questions)
-
         res.json({questions:questions,bookmarked_questions:user.bookmarked_questions,upvoted_questions:user.upvoted_questions,downvoted_questions:user.downvoted_questions})
     }catch(error){
         console.error(error.message);
@@ -64,7 +44,7 @@ app.post("/software_project/addQuestions",async(req,res)=>{
       await question_object.save()
       user.questions.push(question_object)
       await user.save()
-      console.log(question_object)
+      // console.log(question_object)
       res.json(req.body)
   }catch(error){
       console.error(error.message);
@@ -170,6 +150,18 @@ app.post("/software_project/downvote",async(req,res)=>{
     await user.save()
     await question.save()
     res.json(question)
+  }catch(error){
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+})
+
+app.post("/software_project/get_user",async(req,res)=>{
+  try{
+    const {email} = req.body
+    const user = await User.findOne({email:email}).populate('questions').populate('bookmarked_questions')
+    console.log(user)
+    res.json(user)
   }catch(error){
     console.error(error.message);
     res.status(500).send("Internal Server Error");

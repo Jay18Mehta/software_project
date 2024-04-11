@@ -14,7 +14,7 @@ export default function Tab_one({ navigation }) {
     const fetchQuestions = async () => {
         const email = await SecureStore.getItemAsync("email")
         //Api call
-        const response = await fetch(`http://172.31.52.60/software_project/questions`, {
+        const response = await fetch(`http://172.31.33.189/software_project/questions`, {
             method: "post",
             body: JSON.stringify({ email: email }),
             headers: {
@@ -34,10 +34,16 @@ export default function Tab_one({ navigation }) {
     }
 
     useEffect(() => {
+<<<<<<< HEAD
 
         fetchQuestions()
         
     }, [isFocused,navigation])
+=======
+        fetchQuestions()
+    }, [isFocused,navigation])
+
+>>>>>>> 256fa5e8a50ad32788a5f8950a30e14cb4f99d35
 
     return (
         <View style={styles.home}>

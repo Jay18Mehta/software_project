@@ -29,8 +29,7 @@ export default function AddQuestion({ navigation }) {
         e.preventDefault()
         const user_email = await SecureStore.getItemAsync("email")
         // Api Call
-        console.log(category)
-        const response = await fetch(`http://172.31.52.60/software_project/addQuestions`, {   //Ansh =>172.31.52.60, Jay => 172.31.33.189
+        const response = await fetch(`http://172.31.33.189/software_project/addQuestions`, {   //Ansh =>172.31.52.60, Jay => 172.31.33.189
             method: "post",
             headers: {
                 "Content-Type": 'application/json'
@@ -131,39 +130,5 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         fontWeight: 'bold'
-    },
-    dropdown: {
-        height: 50,
-        borderColor: '#000000',
-        borderWidth: 1,
-        borderRadius: 8,
-        paddingHorizontal: 8
-    },
-    icon: {
-        marginRight: 5,
-    },
-    label: {
-        position: 'absolute',
-        backgroundColor: 'white',
-        left: 22,
-        top: 8,
-        zIndex: 999,
-        paddingHorizontal: 8,
-        fontSize: 14,
-    },
-    placeholderStyle: {
-        fontSize: 16,
-        color: '#9E9E9E',
-    },
-    selectedTextStyle: {
-        fontSize: 16
-    },
-    iconStyle: {
-        width: 20,
-        height: 20,
-    },
-    inputSearchStyle: {
-        height: 40,
-        fontSize: 16,
-    },
+    }
 })

@@ -202,7 +202,9 @@ const FlatList_Item = (props) => {
     )
 }
 
-const Question = ({ questions, bookmarked_questions, upvoted_questions , downvoted_questions }) => {
+export default function User_helper({route,navigation}){
+    const { bookmarked_questions, downvoted_questions,questions,upvoted_questions } = route.params.data;
+    // console.log(questions,bookmarked_questions, downvoted_questions,upvoted_questions)
     const renderItem = ({ item }) => {
         return (
             <FlatList_Item
@@ -210,7 +212,7 @@ const Question = ({ questions, bookmarked_questions, upvoted_questions , downvot
                 options={item.options}
                 correct={item.correct}
                 questionId={item._id}
-                BookmarkInstantiation={bookmarked_questions.includes(item._id)}
+                BookmarkInstantiation={bookmarked_questions.find((question)=>question._id == item._id)}
                 UpvoteInstantiation={upvoted_questions.includes(item._id)}
                 DownvoteInstantiation={downvoted_questions.includes(item._id)}
             />
@@ -317,5 +319,3 @@ const styles = StyleSheet.create({
         color: '#908C8C'
     }
 })
-
-export default Question;
