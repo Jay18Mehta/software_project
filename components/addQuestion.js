@@ -4,17 +4,6 @@ import * as SecureStore from 'expo-secure-store'
 import { Dropdown } from 'react-native-element-dropdown'
 import AntDesign from '@expo/vector-icons/AntDesign'
 
-const data = [
-    { label: 'General Knowledge', value: 'General Knowledge' },
-    { label: 'Entertainment', value: 'Entertainment' },
-    { label: 'Science', value: 'Science' },
-    { label: 'Politics', value: 'Politics' },
-    { label: 'Geography', value: 'Geography' },
-    { label: 'History', value: 'History' },
-    { label: 'Sports', value: 'Sports' },
-    { label: 'Others', value: 'Others' },
-]
-
 export default function AddQuestion({ navigation }) {
     const [question, setQuestion] = useState("")
     const [option1, setOption1] = useState("")
@@ -24,13 +13,31 @@ export default function AddQuestion({ navigation }) {
     const [correctOption, setCorrectOption] = useState("")
     const [category, setCategory] = useState("")
 
+    const categoryData = [
+        { label: 'General Knowledge', value: 'General Knowledge' },
+        { label: 'Entertainment', value: 'Entertainment' },
+        { label: 'Science', value: 'Science' },
+        { label: 'Politics', value: 'Politics' },
+        { label: 'Geography', value: 'Geography' },
+        { label: 'History', value: 'History' },
+        { label: 'Sports', value: 'Sports' },
+        { label: 'Others', value: 'Others' }
+    ]
+
+    const correctOptionData = [
+        { label: option1, value: option1 },
+        { label: option2, value: option2 },
+        { label: option3, value: option3 },
+        { label: option4, value: option4 }
+    ].filter(option => option.label.trim() !== "" && option.label.trim() !== null)
+    
+
     const addQuestion = async (e) => {
         // console.log(question)
         e.preventDefault()
         const user_email = await SecureStore.getItemAsync("email")
         // Api Call
-        console.log(category)
-        const response = await fetch("http://172.31.33.189/software_project/addQuestions", {   //Ansh =>172.31.52.60, Jay => 172.31.33.189
+        const response = await fetch(`http://172.31.52.60/software_project/addQuestions`, {   //Ansh =>172.31.52.60, Jay => 172.31.33.189
             method: "post",
             headers: {
                 "Content-Type": 'application/json'
@@ -44,13 +51,13 @@ export default function AddQuestion({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.itemContainer}>
+
                 <Dropdown
                     style={[styles.dropdown]}
                     placeholderStyle={styles.placeholderStyle}
-                    selectedTextStyle={styles.selectedTextStyle}
                     inputSearchStyle={styles.inputSearchStyle}
                     iconStyle={styles.iconStyle}
-                    data={data}
+                    data={categoryData}
                     search={true}
                     maxHeight={300}
                     labelField="label"
@@ -70,12 +77,30 @@ export default function AddQuestion({ navigation }) {
                         />
                     )}
                 />
+
                 <TextInput onChangeText={setQuestion} value={question} style={styles.question} placeholder="Question" />
                 <TextInput onChangeText={setOption1} value={option1} style={styles.input} placeholder="Option 1" />
                 <TextInput onChangeText={setOption2} value={option2} style={styles.input} placeholder="Option 2" />
                 <TextInput onChangeText={setOption3} value={option3} style={styles.input} placeholder="Option 3" />
                 <TextInput onChangeText={setOption4} value={option4} style={styles.input} placeholder="Option 4" />
-                <TextInput onChangeText={setCorrectOption} value={correctOption} style={styles.correct} placeholder="Correct Option" />
+
+                <Dropdown
+                    style={[styles.correct]}
+                    inputSearchStyle={styles.inputSearchStyle}
+                    placeholderStyle={styles.placeholderCorrectStyle}
+                    data={correctOptionData}
+                    search={true}
+                    maxHeight={300}
+                    labelField="label"
+                    valueField="value"
+                    placeholder={"Correct Option"}
+                    searchPlaceholder="Search..."
+                    value={correctOption}
+                    onChange={item => {
+                        setCorrectOption(item.value)
+                    }} 
+                />
+
                 <Pressable onPress={addQuestion} style={styles.save}><Text style={styles.saveText}>Save</Text></Pressable>
             </View>
         </View>
@@ -164,6 +189,9 @@ const styles = StyleSheet.create({
     },
     inputSearchStyle: {
         height: 40,
-        fontSize: 16,
+        fontSize: 16
     },
+    placeholderCorrectStyle: {
+        color: '#9E9E9E'
+    }
 })
