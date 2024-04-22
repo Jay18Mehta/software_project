@@ -5,7 +5,7 @@ import { useIsFocused } from "@react-navigation/native";
 import * as SecureStore from 'expo-secure-store';
 
 export default function Tab_one({ navigation }) {
-    const isFocused = useIsFocused();
+    const isFocused = useIsFocused()
     const [questions, setQuestions] = useState([])
     const [bookmarked_questions, setBookmarked_questions] = useState([])
     const [upvoted_questions, setUpvoted_questions] = useState([])
@@ -14,7 +14,7 @@ export default function Tab_one({ navigation }) {
     const fetchQuestions = async () => {
         const email = await SecureStore.getItemAsync("email")
         //Api call
-        const response = await fetch(`http://172.31.33.189/software_project/questions`, {
+        const response = await fetch(`http://172.31.52.60/software_project/questions`, {
             method: "post",
             body: JSON.stringify({ email: email }),
             headers: {
@@ -30,20 +30,12 @@ export default function Tab_one({ navigation }) {
     }
 
     const addQuestion = async () => {
-        navigation.navigate('AddQuestion')
+        navigation.navigate('Add Question')
     }
 
     useEffect(() => {
-<<<<<<< HEAD
-
-        fetchQuestions()
-        
-    }, [isFocused,navigation])
-=======
         fetchQuestions()
     }, [isFocused,navigation])
-
->>>>>>> 256fa5e8a50ad32788a5f8950a30e14cb4f99d35
 
     return (
         <View style={styles.home}>
@@ -67,10 +59,16 @@ const styles = StyleSheet.create({
         bottom: 40,
         right: 40,
         backgroundColor: "#fca103",
-        width: 44,
-        height: 44,
-        borderRadius: 44 / 2,
+        width: 50, 
+        height: 50,
+        borderRadius: 30, 
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        shadowColor: "#000000", // Added shadow
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     }
+    
 })
