@@ -4,13 +4,24 @@ import * as SecureStore from 'expo-secure-store'
 
 export default function TabTwo({ navigation }) {
     const [questions, setQuestions] = useState([])
+    const [api_bookmarks_ids, setApi_Bookmarks_Ids] = useState([])
 
     const fetchQuestions_General_Knowledge = async () => {
         // API call
         const response = await fetch('https://www.otriviata.com/api.php?amount=50&category=9&type=multiple');
         const json = await response.json()
 
-        console.log(json.results)
+        const emailID = await SecureStore.getItemAsync("email")
+
+        const ids_response = await fetch(`http://172.31.52.60/software_project/current_api_bookmarks`, {
+            method: "post",
+            body: JSON.stringify({ email: emailID }),
+            headers: {
+                "Content-Type": 'application/json'
+            },
+        })
+
+        const ids_json = await ids_response.json()
 
         // Fixing Typo
         const questions = json.results.map(question => ({
@@ -23,10 +34,12 @@ export default function TabTwo({ navigation }) {
         }))
 
         setQuestions(questions)
+        setApi_Bookmarks_Ids(ids_json)
 
         navigation.navigate("General Knowledge", {
             data: {
                 questions: questions,
+                bookmarked_questions: api_bookmarks_ids
             }
         })
     }
