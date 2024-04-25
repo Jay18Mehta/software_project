@@ -55,7 +55,7 @@ const FlatList_Item = (props) => {
 
             setIsBookmarked(false)
 
-            const response = await fetch(`http://172.31.52.60/software_project/remove_bookmark`, {   //Ansh =>172.31.52.60, Jay => 172.31.33.189
+            const response = await fetch(`http://172.31.33.189/software_project/remove_bookmark`, {   //Ansh =>172.31.33.189, Jay => 172.31.33.189
                 method: "post",
                 headers: {
                     "Content-Type": 'application/json'
@@ -67,7 +67,7 @@ const FlatList_Item = (props) => {
 
             setIsBookmarked(true)
 
-            const response = await fetch(`http://172.31.52.60/software_project/add_bookmark`, {   //Ansh =>172.31.52.60, Jay => 172.31.33.189
+            const response = await fetch(`http://172.31.33.189/software_project/add_bookmark`, {   //Ansh =>172.31.33.189, Jay => 172.31.33.189
                 method: "post",
                 headers: {
                     "Content-Type": 'application/json'
@@ -93,7 +93,7 @@ const FlatList_Item = (props) => {
             setIsUpvoted(false)
         }
 
-        const response = await fetch(`http://172.31.52.60/software_project/upvote`, {   //Ansh =>172.31.52.60, Jay => 172.31.33.189
+        const response = await fetch(`http://172.31.33.189/software_project/upvote`, {   //Ansh =>172.31.33.189, Jay => 172.31.33.189
             method: "post",
             headers: {
                 "Content-Type": 'application/json'
@@ -117,7 +117,7 @@ const FlatList_Item = (props) => {
             setIsDownvoted(false)
         }
 
-        const response = await fetch(`http://172.31.52.60/software_project/downvote`, {   //Ansh =>172.31.52.60, Jay => 172.31.33.189
+        const response = await fetch(`http://172.31.33.189/software_project/downvote`, {   //Ansh =>172.31.33.189, Jay => 172.31.33.189
             method: "post",
             headers: {
                 "Content-Type": 'application/json'
