@@ -14,7 +14,7 @@ export default function Tab_one({ navigation }) {
     const fetchQuestions = async () => {
         const email = await SecureStore.getItemAsync("email")
         //Api call
-        const response = await fetch(`http://172.31.52.60/software_project/questions`, {
+        const response = await fetch(`http://172.31.33.189/software_project/questions`, {
             method: "post",
             body: JSON.stringify({ email: email }),
             headers: {

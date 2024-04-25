@@ -45,7 +45,7 @@ app.post("/software_project/addQuestions",async(req,res)=>{
       user.questions.push(question_object)
       await user.save()
       // console.log(question_object)
-      res.json(req.body)
+      res.json(user)
   }catch(error){
       console.error(error.message);
       res.status(500).send("Internal Server Error");
@@ -76,7 +76,7 @@ app.post("/software_project/add_bookmark",async(req,res)=>{
     const {questionId,email} = req.body
     const question = await Question.findById(questionId)
     const user = await User.findOne({email:email})
-    if(!user.bookmarked_questions.includes(question._id)){
+    if(question &&!user.bookmarked_questions.includes(question._id)){
       user.bookmarked_questions.push(question)
     }
     await user.save()
@@ -106,22 +106,24 @@ app.post("/software_project/upvote",async(req,res)=>{
     const {questionId,email} = req.body
     const question = await Question.findById(questionId)
     const user = await User.findOne({email:email})
-    if(!user.upvoted_questions.includes(question._id)){
-      user.upvoted_questions.push(question)
-      question.upvotes += 1
-      if(user.downvoted_questions.includes(question._id)){
-        // user.downvoted_questions.pop(question)
-        await User.findByIdAndUpdate({_id:user._id},{ $pull: { downvoted_questions:questionId  } });
-        question.downvotes -= 1
-      }          
+    if(question){
+      if(!user.upvoted_questions.includes(question._id)){
+        user.upvoted_questions.push(question)
+        question.upvotes += 1
+        if(user.downvoted_questions.includes(question._id)){
+          // user.downvoted_questions.pop(question)
+          await User.findByIdAndUpdate({_id:user._id},{ $pull: { downvoted_questions:questionId  } });
+          question.downvotes -= 1
+        }          
+      }
+      else{
+        // user.upvoted_questions.pop(question)
+        await User.findByIdAndUpdate({_id:user._id},{ $pull: { upvoted_questions:questionId  } });
+        question.upvotes -=1
+      }
+      await user.save()
+      await question.save()
     }
-    else{
-      // user.upvoted_questions.pop(question)
-      await User.findByIdAndUpdate({_id:user._id},{ $pull: { upvoted_questions:questionId  } });
-      question.upvotes -=1
-    }
-    await user.save()
-    await question.save()
     res.json(question)
   }catch(error){
     console.error(error.message);
@@ -133,22 +135,24 @@ app.post("/software_project/downvote",async(req,res)=>{
     const {questionId,email} = req.body
     const question = await Question.findById(questionId)
     const user = await User.findOne({email:email})
-    if(!user.downvoted_questions.includes(question._id)){
-      user.downvoted_questions.push(question)
-      question.downvotes +=1
-      if(user.upvoted_questions.includes(question._id)){
-        // user.upvoted_questions.pop(question)
-        await User.findByIdAndUpdate({_id:user._id},{ $pull: { upvoted_questions:questionId  } });
-        question.upvotes -=1
-      }          
+    if(question){
+      if(!user.downvoted_questions.includes(question._id)){
+        user.downvoted_questions.push(question)
+        question.downvotes +=1
+        if(user.upvoted_questions.includes(question._id)){
+          // user.upvoted_questions.pop(question)
+          await User.findByIdAndUpdate({_id:user._id},{ $pull: { upvoted_questions:questionId  } });
+          question.upvotes -=1
+        }          
+      }
+      else{
+        // user.downvoted_questions.pop(question)
+        await User.findByIdAndUpdate({_id:user._id},{ $pull: { downvoted_questions:questionId  } });
+        question.downvotes -=1
+      }
+      await user.save()
+      await question.save()
     }
-    else{
-      // user.downvoted_questions.pop(question)
-      await User.findByIdAndUpdate({_id:user._id},{ $pull: { downvoted_questions:questionId  } });
-      question.downvotes -=1
-    }
-    await user.save()
-    await question.save()
     res.json(question)
   }catch(error){
     console.error(error.message);
