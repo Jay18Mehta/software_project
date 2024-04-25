@@ -45,7 +45,7 @@ export default function AddQuestion({ navigation }) {
             body: JSON.stringify({ question: question, options: [option1, option2, option3, option4], correct: correctOption, email: user_email, category: category })
         })
         const json = await response.json()
-        navigation.navigate('Tab_one')
+        navigation.navigate('Doubt MCQs')
     }
 
     return (

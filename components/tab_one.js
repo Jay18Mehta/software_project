@@ -1,8 +1,8 @@
 import { View, Text, Pressable, StyleSheet } from "react-native"
-import { useState, useEffect } from "react";
-import Question from "./question";
-import { useIsFocused } from "@react-navigation/native";
-import * as SecureStore from 'expo-secure-store';
+import { useState, useEffect } from "react"
+import Question from "./question"
+import { useIsFocused } from "@react-navigation/native"
+import * as SecureStore from 'expo-secure-store'
 
 export default function Tab_one({ navigation }) {
     const isFocused = useIsFocused()
@@ -35,7 +35,7 @@ export default function Tab_one({ navigation }) {
 
     useEffect(() => {
         fetchQuestions()
-    }, [isFocused,navigation])
+    }, [isFocused,navigation,bookmarked_questions])
 
     return (
         <View style={styles.home}>

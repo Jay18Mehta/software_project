@@ -3,24 +3,20 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { FlatList } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
 import * as SecureStore from 'expo-secure-store'
-import { Dropdown } from 'react-native-element-dropdown'
-import AntDesign from '@expo/vector-icons/AntDesign'
 
 const FlatList_Item = (props) => {
-    const { question, options, correct, category, questionId, BookmarkInstantiation, UpvoteInstantiation, DownvoteInstantiation } = props
+    const { question, options, correct, questionId, category, UpvoteInstantiation, DownvoteInstantiation } = props
 
     const [selectedOption, setSelectedOption] = useState(-1) // selectedOption is the index of option selected.
     const [isCorrect, setIsCorrect] = useState(-1) // -1 -> Not Answered , 0 -> Incorrect Answer , 1 -> Correct Answer
-    const [isBookmarked, setIsBookmarked] = useState(false)
+    const [isBookmarked, setIsBookmarked] = useState(true)
     const [isUpvoted, setIsUpvoted] = useState(false)
     const [isDownvoted, setIsDownvoted] = useState(false)
 
-    // BookmarkInstantiation dependency is passed to overcome false instantiation.
     useEffect(() => {
-        setIsBookmarked(BookmarkInstantiation)
         setIsUpvoted(UpvoteInstantiation)
         setIsDownvoted(DownvoteInstantiation)
-    }, [BookmarkInstantiation, UpvoteInstantiation, DownvoteInstantiation])
+    }, [UpvoteInstantiation, DownvoteInstantiation])
 
     const handleOptionPress = (optionIndex) => {
 
@@ -54,34 +50,16 @@ const FlatList_Item = (props) => {
 
         const email = await SecureStore.getItemAsync("email")
 
-        if (isBookmarked) {
+        setIsBookmarked(false)
 
-            setIsBookmarked(false)
+        const response = await fetch(`http://172.31.52.60/software_project/remove_bookmark`, {   //Ansh =>172.31.52.60, Jay => 172.31.33.189
+            method: "post",
+            headers: {
+                "Content-Type": 'application/json'
+            },
+            body: JSON.stringify({ questionId: questionId, email: email })
+        })
 
-            const response = await fetch(`http://172.31.33.189/software_project/remove_bookmark`, {   //Ansh =>172.31.52.60, Jay => 172.31.33.189
-                method: "post",
-                headers: {
-                    "Content-Type": 'application/json'
-                },
-                body: JSON.stringify({ questionId: questionId, email: email })
-            })
-
-            const json = await response.json()
-        }
-        else {
-
-            setIsBookmarked(true)
-
-            const response = await fetch(`http://172.31.33.189/software_project/add_bookmark`, {   //Ansh =>172.31.33.189, Jay => 172.31.33.189
-                method: "post",
-                headers: {
-                    "Content-Type": 'application/json'
-                },
-                body: JSON.stringify({ questionId: questionId, email: email })
-            })
-
-            const json = await response.json()
-        }
     }
 
     const handleUpvotePress = async (questionId) => {
@@ -99,15 +77,13 @@ const FlatList_Item = (props) => {
             setIsUpvoted(false)
         }
 
-        const response = await fetch(`http://172.31.33.189/software_project/upvote`, {   //Ansh =>172.31.33.189, Jay => 172.31.33.189
+        const response = await fetch(`http://172.31.52.60/software_project/upvote`, {   //Ansh =>172.31.52.60, Jay => 172.31.33.189
             method: "post",
             headers: {
                 "Content-Type": 'application/json'
             },
             body: JSON.stringify({ questionId: questionId, email: email })
         })
-
-        const json = await response.json()
     }
 
     const handleDownvotePress = async () => {
@@ -125,15 +101,13 @@ const FlatList_Item = (props) => {
             setIsDownvoted(false)
         }
 
-        const response = await fetch(`http://172.31.33.189/software_project/downvote`, {   //Ansh =>172.31.33.189, Jay => 172.31.33.189
+        const response = await fetch(`http://172.31.52.60/software_project/downvote`, {   //Ansh =>172.31.52.60, Jay => 172.31.33.189
             method: "post",
             headers: {
                 "Content-Type": 'application/json'
             },
             body: JSON.stringify({ questionId: questionId, email: email })
         })
-
-        const json = await response.json()
 
     }
 
@@ -204,101 +178,32 @@ const FlatList_Item = (props) => {
     )
 }
 
-const Question = ({ questions, bookmarked_questions, upvoted_questions, downvoted_questions }) => {
-
-    const [isFilter, setIsFilter] = useState(false)
-    const [FilterCategory, setFilterCategory] = useState("")
-
-    const categoryData = [
-        { label: 'General Knowledge', value: 'General Knowledge' },
-        { label: 'Entertainment', value: 'Entertainment' },
-        { label: 'Science', value: 'Science' },
-        { label: 'Politics', value: 'Politics' },
-        { label: 'Geography', value: 'Geography' },
-        { label: 'History', value: 'History' },
-        { label: 'Sports', value: 'Sports' },
-        { label: 'Others', value: 'Others' }
-    ]
+export default function User_helper_One({ route, navigation }) {
+    const { downvoted_questions, questions, upvoted_questions } = route.params.data
 
     const renderItem = ({ item }) => {
 
-        if (isFilter && FilterCategory != item.category) {
-            return null
-        }
-        else {
-
-            return (
-                <FlatList_Item
-                    question={item.question}
-                    options={item.options}
-                    correct={item.correct}
-                    category={item.category}
-                    questionId={item._id}
-                    BookmarkInstantiation={bookmarked_questions.includes(item._id)}
-                    UpvoteInstantiation={upvoted_questions.includes(item._id)}
-                    DownvoteInstantiation={downvoted_questions.includes(item._id)}
-                />
-            )
-
-        }
+        return (
+            <FlatList_Item
+                question={item.question}
+                options={item.options}
+                correct={item.correct}
+                questionId={item._id}
+                category={item.category}
+                UpvoteInstantiation={upvoted_questions.includes(item._id)}
+                DownvoteInstantiation={downvoted_questions.includes(item._id)}
+            />
+        )
     }
 
     return (
-
-        <View style={styles.container} >
-
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} >
-
-                <View>
-                    <Dropdown
-                        style={[styles.dropdown]}
-                        placeholderStyle={styles.placeholderStyle}
-                        inputSearchStyle={styles.inputSearchStyle}
-                        iconStyle={styles.iconStyle}
-                        data={categoryData}
-                        search={true}
-                        maxHeight={300}
-                        labelField="label"
-                        valueField="value"
-                        placeholder={'Filter Category'}
-                        searchPlaceholder="Search..."
-                        value={FilterCategory}
-                        onChange={item => {
-                            setFilterCategory(item.value)
-                            setIsFilter(true)
-                        }}
-                        renderLeftIcon={() => (
-                            <AntDesign
-                                style={styles.icon}
-                                color={'black'}
-                                name="filter"
-                                size={20}
-                            />
-                        )}
-                    />
-                </View>
-
-                <View>
-                    <TouchableOpacity style={styles.removeFilter} onPress={() => {
-                        setIsFilter(false)
-                        setFilterCategory("")
-                    }}>
-                        <Text style={styles.removeFilterText}>
-                            Remove Filter
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-
-            </View>
-
+        <View style={styles.container}>
             <FlatList
                 data={questions}
                 renderItem={renderItem}
                 keyExtractor={(item) => item._id}
             />
-
         </View>
-
     )
 }
 
@@ -458,5 +363,3 @@ const styles = StyleSheet.create({
         color: '#9E9E9E'
     }
 })
-
-export default Question;

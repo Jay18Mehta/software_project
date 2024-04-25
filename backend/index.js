@@ -4,8 +4,9 @@ const cors = require('cors')
 const mongoose = require("mongoose")
 const port = 80
 
-const Question =  require("./models/question")
-const User = require("./models/user") 
+const Question = require("./models/question")
+const User = require("./models/user")
+const Api_Question = require("./models/api_question")
 
 main().catch(err => console.log(err));
 
@@ -15,7 +16,7 @@ async function main() {
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
+db.once('open', function () {
   console.log("we're connected!")
 });
 
@@ -56,24 +57,24 @@ app.post("/software_project/login",async(req,res)=>{
   try{
     const {username , email} = req.body
     console.log(req.body)
-    const user = await User.findOne({username:username,email:email})
+    const user = await User.findOne({ username: username, email: email })
     console.log(user)
-    if(!user){
-      const new_user = new User({username:username,email:email})
+    if (!user) {
+      const new_user = new User({ username: username, email: email })
       await new_user.save()
       console.log(new_user)
       res.json(new_user)
     }
     res.json(user)
-  }catch(error){
+  } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
   }
 })
 
-app.post("/software_project/add_bookmark",async(req,res)=>{
-  try{
-    const {questionId,email} = req.body
+app.post("/software_project/add_bookmark", async (req, res) => {
+  try {
+    const { questionId, email } = req.body
     const question = await Question.findById(questionId)
     const user = await User.findOne({email:email})
     if(question &&!user.bookmarked_questions.includes(question._id)){
@@ -81,29 +82,30 @@ app.post("/software_project/add_bookmark",async(req,res)=>{
     }
     await user.save()
     res.json(question)
-  }catch(error){
+  } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
   }
 })
 
-app.post("/software_project/remove_bookmark",async(req,res)=>{
-  try{
-    const {questionId,email} = req.body
-    const user = await User.findOne({email:email})
-    if(user.bookmarked_questions.includes(questionId)){
-      await User.findByIdAndUpdate({_id:user._id},{ $pull: { bookmarked_questions:questionId  } });
+app.post("/software_project/remove_bookmark", async (req, res) => {
+  try {
+    const { questionId, email } = req.body
+    const user = await User.findOne({ email: email })
+    if (user.bookmarked_questions.includes(questionId)) {
+      
+      await User.findByIdAndUpdate({ _id: user._id }, { $pull: { bookmarked_questions: questionId } });
     }
     res.json(user)
-  }catch(error){
+  } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
   }
 })
 
-app.post("/software_project/upvote",async(req,res)=>{
-  try{
-    const {questionId,email} = req.body
+app.post("/software_project/upvote", async (req, res) => {
+  try {
+    const { questionId, email } = req.body
     const question = await Question.findById(questionId)
     const user = await User.findOne({email:email})
     if(question){
@@ -125,14 +127,14 @@ app.post("/software_project/upvote",async(req,res)=>{
       await question.save()
     }
     res.json(question)
-  }catch(error){
+  } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
   }
 })
-app.post("/software_project/downvote",async(req,res)=>{
-  try{
-    const {questionId,email} = req.body
+app.post("/software_project/downvote", async (req, res) => {
+  try {
+    const { questionId, email } = req.body
     const question = await Question.findById(questionId)
     const user = await User.findOne({email:email})
     if(question){
@@ -154,24 +156,57 @@ app.post("/software_project/downvote",async(req,res)=>{
       await question.save()
     }
     res.json(question)
-  }catch(error){
+  } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
   }
 })
 
-app.post("/software_project/get_user",async(req,res)=>{
-  try{
-    const {email} = req.body
-    const user = await User.findOne({email:email}).populate('questions').populate('bookmarked_questions')
-    console.log(user)
+app.post("/software_project/get_user", async (req, res) => {
+  try {
+    const { email } = req.body
+    const user = await User.findOne({ email: email }).populate('questions').populate('bookmarked_questions').populate('api_bookmarks')
     res.json(user)
-  }catch(error){
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+})
+
+app.post("/software_project/get_user_ids", async (req, res) => {
+  try {
+    const { email } = req.body
+    const user = await User.findOne({ email: email })
+    res.json(user)
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+})
+
+app.post("/software_project/api_bookmark", async (req, res) => {
+  try {
+    const { email, id, question, options, correct } = req.body
+    const user = await User.findOne({ email: email })
+    const api_question = await Api_Question.findOne({ id: id })
+    if (!api_question) {
+      const new_api_question = new Api_Question({ question: question, id: id, options: options, correct: correct })
+      await new_api_question.save()
+      user.api_bookmarks.push(new_api_question)
+    }
+    else if (user.api_bookmarks.includes(api_question._id)) {
+      await User.findByIdAndUpdate({ _id: user._id }, { $pull: { api_bookmarks: api_question._id } });
+    }
+    else {
+      user.api_bookmarks.push(api_question)
+    }
+    await user.save()
+  } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
   }
 })
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+  console.log(`Example app listening on port ${port}`)
 })
