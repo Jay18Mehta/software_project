@@ -48,7 +48,7 @@ export default function User({ navigation }) {
     async function setUser() {
         const emailID = await SecureStore.getItemAsync("email")
         setEmail(emailID)
-        const response = await fetch(`http://172.31.33.189/software_project/get_user`, {
+        const response = await fetch(`http://172.31.52.60/software_project/get_user`, {
             method: "post",
             body: JSON.stringify({ email: emailID }),
             headers: {
@@ -65,7 +65,7 @@ export default function User({ navigation }) {
 
     async function setUser_Ids() {
         const emailID = await SecureStore.getItemAsync("email")
-        const response = await fetch(`http://172.31.33.189/software_project/get_user_ids`, {
+        const response = await fetch(`http://172.31.52.60/software_project/get_user_ids`, {
             method: "post",
             body: JSON.stringify({ email: emailID }),
             headers: {

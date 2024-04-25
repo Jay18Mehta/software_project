@@ -109,8 +109,8 @@ async function downvoteQuestion(questionId,email="b22cs034@iitj.ac.in"){
     return json
 }
 
-const user_email = "b22cs034@iitj.ac.in"
-const user_name = "Mehta Jay Kamalkumar (B22CS034)"
+const user_email = "b22cs012@iitj.ac.in"
+const user_name = "Ansh Mehul Mehta (B22CS012)"
 
 async function test1_fetchingQuestionsCorrectly(){
     console.log(chalk.blue("Starting test1:fetch questions working correctly"))

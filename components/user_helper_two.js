@@ -9,13 +9,7 @@ const FlatList_Item = (props) => {
 
     const [selectedOption, setSelectedOption] = useState(-1) // selectedOption is the index of option selected.
     const [isCorrect, setIsCorrect] = useState(-1) // -1 -> Not Answered , 0 -> Incorrect Answer , 1 -> Correct Answer
-    const [isBookmarked, setIsBookmarked] = useState(false)
-
-    // BookmarkInstantiation dependency is passed to overcom false instantiation.
-    // useEffect(() => {
-    //     setIsBookmarked(BookmarkInstantiation)
-    // }, [BookmarkInstantiation])
-
+    const [isBookmarked, setIsBookmarked] = useState(true)
 
     const handleOptionPress = (optionIndex) => {
 
@@ -60,7 +54,7 @@ const FlatList_Item = (props) => {
 
         }
 
-        const response = await fetch(`http://172.31.33.189/software_project/api_bookmark`, {   //Ansh =>172.31.33.189, Jay => 172.31.33.189
+        const response = await fetch(`http://172.31.52.60/software_project/api_bookmark`, {   //Ansh =>172.31.52.60, Jay => 172.31.52.60
             method: "post",
             headers: {
                 "Content-Type": 'application/json'
@@ -127,7 +121,6 @@ const API_Question = ({ route, navigation }) => {
     const { questions, bookmarked_questions } = route.params.data
 
     const renderItem = ({ item }) => {
-
         
 
         return (
@@ -135,7 +128,6 @@ const API_Question = ({ route, navigation }) => {
                 question={item.question}
                 options={item.options}
                 correct={item.correct}
-                // category={item.category}
                 questionId={item._id}
             />
         )

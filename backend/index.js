@@ -207,6 +207,20 @@ app.post("/software_project/api_bookmark", async (req, res) => {
   }
 })
 
+app.post("/software_project/current_api_bookmarks", async (req, res) => {
+  try {
+    const {email} = req.body
+    const user = await User.findOne({email:email}).populate('api_bookmarks')
+    console.log(user.api_bookmarks)
+    const ids = user.api_bookmarks.map(user=>user.id)
+    console.log(ids)
+    res.json(ids)
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+})
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })

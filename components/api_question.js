@@ -5,16 +5,16 @@ import { FontAwesome } from '@expo/vector-icons'
 import * as SecureStore from 'expo-secure-store'
 
 const FlatList_Item = (props) => {
-    const { question, options, correct, questionId, diffculty } = props
+    const { question, options, correct, questionId, diffculty, BookmarkInstantiation } = props
 
     const [selectedOption, setSelectedOption] = useState(-1) // selectedOption is the index of option selected.
     const [isCorrect, setIsCorrect] = useState(-1) // -1 -> Not Answered , 0 -> Incorrect Answer , 1 -> Correct Answer
     const [isBookmarked, setIsBookmarked] = useState(false)
 
-    // BookmarkInstantiation dependency is passed to overcom false instantiation.
-    // useEffect(() => {
-    //     setIsBookmarked(BookmarkInstantiation)
-    // }, [BookmarkInstantiation])
+    //BookmarkInstantiation dependency is passed to overcom false instantiation.
+    useEffect(() => {
+        setIsBookmarked(BookmarkInstantiation)
+    }, [BookmarkInstantiation])
 
 
     const handleOptionPress = (optionIndex) => {
@@ -60,7 +60,7 @@ const FlatList_Item = (props) => {
 
         }
 
-        const response = await fetch(`http://172.31.33.189/software_project/api_bookmark`, {   //Ansh =>172.31.52.60, Jay => 172.31.33.189
+        const response = await fetch(`http://172.31.52.60/software_project/api_bookmark`, {   //Ansh =>172.31.52.60, Jay => 172.31.52.60
             method: "post",
             headers: {
                 "Content-Type": 'application/json'
@@ -175,9 +175,9 @@ const API_Question = ({ route, navigation }) => {
                 question={item.question}
                 options={options}
                 correct={item.correct_answer}
-                category={item.category}
                 questionId={item.id}
                 diffculty={difficulty}
+                BookmarkInstantiation={bookmarked_questions.includes(item.id)}
             />
         )
     }
