@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
 const Question = require("./question")
+const Api_Question = require("./api_question")
 
 const userSchema  = new mongoose.Schema({
     username : {
@@ -35,7 +36,13 @@ const userSchema  = new mongoose.Schema({
             type:mongoose.Schema.Types.ObjectId,
             ref:'Question'
         }
-    ], 
+    ],
+    api_bookmarks:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'Api_Question'
+        }
+    ] 
 })
 
 const User = mongoose.model("User",userSchema)
