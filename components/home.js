@@ -19,7 +19,7 @@ const Tab = createBottomTabNavigator();
 const Question_One_Tab = ({ navigation }) => {
     return (
         <NavigationContainer style={styles.container} independent={true}>
-            <Stack.Navigator initialRouteName="Doubt MCQs" screenOptions={{
+            <Stack.Navigator initialRouteName="Asked MCQs" screenOptions={{
 
                 headerTitleStyle: {
                     fontSize: 22,
@@ -29,7 +29,7 @@ const Question_One_Tab = ({ navigation }) => {
                 headerTitleAlign: 'center'
 
             }}>
-                <Stack.Screen name="Doubt MCQs" component={Tab_one} options={{ headerShown: true }} />
+                <Stack.Screen name="Asked MCQs" component={Tab_one} options={{ headerShown: true }} />
                 <Stack.Screen name="Add Question" component={AddQuestion} options={{ headerShown: true }} />
             </Stack.Navigator>
         </NavigationContainer>
@@ -76,9 +76,9 @@ const User_Tab = ({ navigation }) => {
 
             }}>
                 <User_Stack.Screen name="User Profile" component={User} options={{ headerShown: true }} />
-                <User_Stack.Screen name="Bookmarked : Doubt" component={User_helper_One} options={{ headerShown: true }} />
+                <User_Stack.Screen name="Bookmarked : Asked" component={User_helper_One} options={{ headerShown: true }} />
                 <User_Stack.Screen name="Bookmarked : Practice" component={User_helper_Two} options={{ headerShown: true }} />
-                <User_Stack.Screen name="Your Doubt Questions" component={User_helper_Three} options={{ headerShown: true }} />
+                <User_Stack.Screen name="Your Asked Questions" component={User_helper_Three} options={{ headerShown: true }} />
             </User_Stack.Navigator>
         </NavigationContainer>
     )

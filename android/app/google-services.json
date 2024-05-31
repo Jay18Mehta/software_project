@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "511406748599",
+    "project_id": "software-project-94f28",
+    "storage_bucket": "software-project-94f28.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:511406748599:android:83dd66fc404b2b6883ae32",
+        "android_client_info": {
+          "package_name": "com.jay18mehta.software_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "511406748599-garnispgvaqc5ahdp8g9slgll5nho40j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jay18mehta.software_project",
+            "certificate_hash": "46744c5f56da2ba6a5fe487c93988bd8d618eec1"
+          }
+        },
+        {
+          "client_id": "511406748599-l11pbmkhc8lqgo8mq1unbh6cocsgg2fd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jay18mehta.software_project",
+            "certificate_hash": "2aa145ae2bf08300ea46e104f142328ee44cf712"
+          }
+        },
+        {
+          "client_id": "511406748599-ku75uop3lau27dso9c1bdlkgsu44iek4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEi6aeKk0r5k8EI_sd4nblRgQ7fO6bUAg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "511406748599-ku75uop3lau27dso9c1bdlkgsu44iek4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

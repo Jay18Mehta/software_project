@@ -54,7 +54,7 @@ const FlatList_Item = (props) => {
 
         }
 
-        const response = await fetch(`http://172.31.52.60/software_project/api_bookmark`, {   //Ansh =>172.31.52.60, Jay => 172.31.52.60
+        const response = await fetch(`http://192.168.29.84/software_project/api_bookmark`, {  
             method: "post",
             headers: {
                 "Content-Type": 'application/json'
