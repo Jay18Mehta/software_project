@@ -15,7 +15,7 @@ export default function Login({ navigation }) {
 
     const saveUser = async (name, email) => {
         console.log(name, email)
-        const response = await fetch(`http://172.31.52.60/software_project/login`, {   //Ansh =>172.31.52.60, Jay => 172.31.33.189
+        const response = await fetch(`http://192.168.29.84/software_project/login`, {   //Ansh College =>172.31.52.60, Jay => 172.31.33.189 Ansh Home => 192.168.29.84
             method: "post",
             headers: {
                 "Content-Type": 'application/json'

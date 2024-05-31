@@ -1,7 +1,11 @@
 import * as SecureStore from 'expo-secure-store';
+import * as ImagePicker from 'expo-image-picker';
+import React from 'react';
 import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
-import { useIsFocused } from "@react-navigation/native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native'
+import { useIsFocused } from "@react-navigation/native"
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { MaterialIcons } from "@expo/vector-icons"
 
 export default function User({ navigation }) {
     const [email, setEmail] = useState("")
@@ -16,7 +20,7 @@ export default function User({ navigation }) {
     const [downvoted_questions_ids, setDownvoted_questions_Ids] = useState([])
 
     const showBookmarkedDoubtQuestions = () => {
-        navigation.navigate("Bookmarked : Doubt", {
+        navigation.navigate("Bookmarked : Asked", {
             data: {
                 questions: bookmarked_questions,
                 upvoted_questions: upvoted_questions_ids,
@@ -35,7 +39,7 @@ export default function User({ navigation }) {
     }
 
     const showUserQuestions = () => {
-        navigation.navigate("Your Doubt Questions", {
+        navigation.navigate("Your Asked Questions", {
             data: {
                 questions: questions,
                 bookmarked_questions: bookmarked_questions_ids,
@@ -48,7 +52,7 @@ export default function User({ navigation }) {
     async function setUser() {
         const emailID = await SecureStore.getItemAsync("email")
         setEmail(emailID)
-        const response = await fetch(`http://172.31.52.60/software_project/get_user`, {
+        const response = await fetch(`http://192.168.29.84/software_project/get_user`, {
             method: "post",
             body: JSON.stringify({ email: emailID }),
             headers: {
@@ -65,7 +69,7 @@ export default function User({ navigation }) {
 
     async function setUser_Ids() {
         const emailID = await SecureStore.getItemAsync("email")
-        const response = await fetch(`http://172.31.52.60/software_project/get_user_ids`, {
+        const response = await fetch(`http://192.168.29.84/software_project/get_user_ids`, {
             method: "post",
             body: JSON.stringify({ email: emailID }),
             headers: {
@@ -85,63 +89,86 @@ export default function User({ navigation }) {
         setUser_Ids()
     }, [navigation, isFocused])
 
+    const imagesDataURL = require('../assets/AppDisplayPhoto.jpeg')
+    const [selectedImage, setSelectedImage] = useState(imagesDataURL)
+
+    const handleImageSelection = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 4],
+            quality: 1,
+        })
+
+        console.log(result)
+
+        if (!result.canceled) {
+            setSelectedImage({ uri: result.assets[0].uri });
+        }
+    };
+
     return (
-        <View style={styles.home}>
-            <Text>username : {username}</Text>
-            <Text>Email : {email}</Text>
-            <View style={styles.container}>
-                <View style={styles.button}>
-                    <TouchableOpacity >
-                        <Text style={styles.buttonText} onPress={() => showBookmarkedDoubtQuestions()}>Bookmarked Doubt Questions</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.button}>
-                    <TouchableOpacity >
-                        <Text style={styles.buttonText} onPress={() => showBookmarkedPractiseQuestions()}>Bookmarked Practice Questions</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.button}>
-                    <TouchableOpacity >
-                        <Text style={styles.buttonText} onPress={() => showUserQuestions()}>Your Doubt Questions</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
+        <SafeAreaView style={styles.wrapper}>
 
+            <ScrollView>
+                <View style={styles.container}>
+                    <Image style={styles.imageIcon} source={selectedImage} />
+                    <TouchableOpacity onPress={handleImageSelection}>
+                        <View style={styles.container2}>
+                            <MaterialIcons name="photo-camera" size={32} color={'#242760'} />
+                        </View>
+                    </TouchableOpacity>
+                </View>
 
-        </View>
+            </ScrollView>
+
+        </SafeAreaView>
+
+        // <View style={styles.home}>
+        //     <Text>username : {username}</Text>
+        //     <Text>Email : {email}</Text>
+        //     <View style={styles.container}>
+        //         <View style={styles.button}>
+        //             <TouchableOpacity >
+        //                 <Text style={styles.buttonText} onPress={() => showBookmarkedDoubtQuestions()}>Bookmarked Asked Questions</Text>
+        //             </TouchableOpacity>
+        //         </View>
+        //         <View style={styles.button}>
+        //             <TouchableOpacity >
+        //                 <Text style={styles.buttonText} onPress={() => showBookmarkedPractiseQuestions()}>Bookmarked Practice Questions</Text>
+        //             </TouchableOpacity>
+        //         </View>
+        //         <View style={styles.button}>
+        //             <TouchableOpacity >
+        //                 <Text style={styles.buttonText} onPress={() => showUserQuestions()}>Your Asked Questions</Text>
+        //             </TouchableOpacity>
+        //         </View>
+        //     </View>
+        // </View>
     )
 }
 
 const styles = StyleSheet.create({
-    home: {
-        flex: 1
+    wrapper: {
+        flex: 1,
+        paddingHorizontal: 22 // 30
     },
     container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: 30,  // Add some padding to the container
+        alignItems: "center",
+        marginVertical: 22,
     },
-    button: {
-        backgroundColor: '#007bff',
-        padding: 10,
-        marginVertical: 20,
-        borderRadius: 5,
-        width: '100%',
-        alignItems: 'center',
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
+    imageIcon: {
+        height: 200,
+        width: 200,
+        borderRadius: 100,
+        borderWidth: 2,
+        borderColor: '#242760'
     },
-    buttonText: {
-        color: '#fff',
-        fontSize: 18,
-        fontWeight: 'bold',
-        letterSpacing: 1,
-    },
+    container2: {
+        position: "absolute",
+        bottom: 5,
+        right: -90,
+        zIndex: 9999,
+    }
+
 })

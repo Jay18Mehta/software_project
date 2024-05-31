@@ -14,7 +14,7 @@ export default function Tab_one({ navigation }) {
     const fetchQuestions = async () => {
         const email = await SecureStore.getItemAsync("email")
         //Api call
-        const response = await fetch(`http://172.31.52.60/software_project/questions`, {
+        const response = await fetch(`http://192.168.29.84/software_project/questions`, {
             method: "post",
             body: JSON.stringify({ email: email }),
             headers: {
@@ -23,6 +23,7 @@ export default function Tab_one({ navigation }) {
         })
 
         const json = await response.json()
+        // console.log(questions) -> BUG
         setQuestions(json.questions)
         setBookmarked_questions(json.bookmarked_questions)
         setUpvoted_questions(json.upvoted_questions)

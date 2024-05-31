@@ -37,7 +37,7 @@ export default function AddQuestion({ navigation }) {
         e.preventDefault()
         const user_email = await SecureStore.getItemAsync("email")
         // Api Call
-        const response = await fetch(`http://172.31.52.60/software_project/addQuestions`, {   //Ansh =>172.31.52.60 Jay => 172.31.52.60
+        const response = await fetch(`http://192.168.29.84/software_project/addQuestions`, {  
             method: "post",
             headers: {
                 "Content-Type": 'application/json'
@@ -45,7 +45,7 @@ export default function AddQuestion({ navigation }) {
             body: JSON.stringify({ question: question, options: [option1, option2, option3, option4], correct: correctOption, email: user_email, category: category })
         })
         const json = await response.json()
-        navigation.navigate('Doubt MCQs')
+        navigation.navigate('Asked MCQs')
     }
 
     return (
